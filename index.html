@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Core SEO Meta Tags -->
+    <title>Jonas Schnell</title>
+    <meta name="description" content="Jonas Schnell ist Systems Architect, Developer und Gründer von Darkstone Cloud. Spezialisiert auf hochverfügbare Cloud-Infrastrukturen und verteilte Systeme.">
+    <meta name="keywords" content="Jonas Schnell, Darkstone Cloud, Systems Architect, Developer, Cloud Infrastruktur, KVM, Docker">
+    <meta name="author" content="Jonas Schnell">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://jonasschnell.com/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jonasschnell.com/">
+    <meta property="og:title" content="Jonas Schnell | Systems Architect & Developer">
+    <meta property="og:description" content="Gründer von Darkstone Cloud. Spezialisiert auf hochverfügbare Cloud-Infrastrukturen.">
+    <meta property="og:image" content="https://jonasschnell.com/image/jonas.png">
+    <meta property="og:locale" content="de_DE">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Jonas Schnell | Systems Architect & Developer">
+    <meta name="twitter:description" content="Gründer von Darkstone Cloud. Spezialisiert auf hochverfügbare Cloud-Infrastrukturen.">
+    <meta name="twitter:image" content="https://jonasschnell.com/image/jonas.png">
+
+    <style>
+        /* Lokaler Font-Fallback & Basis-Reset */
+        :root {
+            --ash-950: #0b0b0d;
+            --ash-900: #121215;
+            --ash-800: #1a1a1e;
+            --ash-700: #27272e;
+            --ash-500: #71717a;
+            --ash-300: #a1a1aa;
+            --ash-100: #f4f4f5;
+        }
+
+        *, ::before, ::after {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb;
+        }
+
+        html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--ash-950);
+            color: var(--ash-300);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .bg-ash-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+
+        .ash-card {
+            background: rgba(18, 18, 21, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .ash-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Essential Utility Classes Replacement */
+        .sticky { position: sticky; }
+        .top-0 { top: 0; }
+        .z-50 { z-index: 50; }
+        .border-b { border-bottom-width: 1px; }
+        .border-t { border-top-width: 1px; }
+        .border-ash-800 { border-color: var(--ash-800); }
+        .border-ash-800\/60 { border-color: rgba(26, 26, 30, 0.6); }
+        .border-ash-800\/40 { border-color: rgba(26, 26, 30, 0.4); }
+        .bg-ash-950 { background-color: var(--ash-950); }
+        .bg-ash-950\/80 { background-color: rgba(11, 11, 13, 0.8); }
+        .bg-ash-900 { background-color: var(--ash-900); }
+        .bg-ash-800 { background-color: var(--ash-800); }
+        .bg-ash-800\/50 { background-color: rgba(26, 26, 30, 0.5); }
+        .bg-ash-800\/40 { background-color: rgba(26, 26, 30, 0.4); }
+        .backdrop-blur-md { backdrop-filter: blur(12px); }
+
+        .max-w-6xl { max-width: 72rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .h-16 { height: 4rem; }
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .flex-grow { flex-grow: 1; }
+        .flex-col { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+
+        .space-x-6 > * + * { margin-left: 1.5rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-5 > * + * { margin-top: 1.25rem; }
+        .space-y-8 > * + * { margin-top: 2rem; }
+        .space-y-20 > * + * { margin-top: 5rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-2\.5 { gap: 0.625rem; }
+        .gap-8 { gap: 2rem; }
+
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-base { font-size: 1rem; line-height: 1.5rem; }
+        .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .text-\[10px\] { font-size: 10px; }
+        .text-\[11px\] { font-size: 11px; }
+
+        .tracking-widest { letter-spacing: 0.1em; }
+        .tracking-wider { letter-spacing: 0.05em; }
+        .tracking-wide { letter-spacing: 0.025em; }
+        .tracking-tight { letter-spacing: -0.025em; }
+
+        .text-ash-100 { color: var(--ash-100); }
+        .text-ash-300 { color: var(--ash-300); }
+        .text-ash-500 { color: var(--ash-500); }
+        .text-white { color: #ffffff; }
+
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .font-extrabold { font-weight: 800; }
+        .uppercase { text-transform: uppercase; }
+
+        .w-2 { width: 0.5rem; }
+        .h-2 { height: 0.5rem; }
+        .w-3\.5 { width: 0.875rem; }
+        .h-3\.5 { height: 0.875rem; }
+        .w-5 { width: 1.25rem; }
+        .h-5 { height: 1.25rem; }
+        .w-48 { width: 12rem; }
+        .h-48 { height: 12rem; }
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+
+        .rounded-full { border-radius: 9999px; }
+        .rounded { border-radius: 0.25rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .overflow-hidden { overflow: hidden; }
+
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .p-6 { padding: 1.5rem; }
+        .pb-4 { padding-bottom: 1rem; }
+        .pt-2 { padding-top: 0.5rem; }
+        .pt-0 { padding-top: 0; }
+
+        .leading-relaxed { line-height: 1.625; }
+        .object-cover { object-fit: cover; }
+        .filter { filter: contrast(125%); }
+
+        .transition-colors { transition-property: color, background-color, border-color; transition-duration: 150ms; }
+        .transition-transform { transition-property: transform; transition-duration: 500ms; }
+        .transition-all { transition-property: all; transition-duration: 500ms; }
+        .opacity-80 { opacity: 0.8; }
+        .text-center { text-align: center; }
+        .inline-flex { display: inline-flex; }
+        .relative { position: relative; }
+        .aspect-\[16\/8\] { aspect-ratio: 16 / 8; }
+
+        a { color: inherit; text-decoration: none; }
+
+        .group:hover .group-hover\:scale-105 { transform: scale(1.05); }
+        .group:hover .group-hover\:opacity-100 { opacity: 1; }
+        .group:hover .group-hover\:text-white { color: #ffffff; }
+        .hover\:text-ash-100:hover { color: var(--ash-100); }
+        .hover\:text-white:hover { color: #ffffff; }
+
+        @media (min-width: 768px) {
+            .md\:py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+            .md\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .md\:col-span-4 { grid-column: span 4 / span 4; }
+            .md\:col-span-8 { grid-column: span 8 / span 8; }
+            .md\:justify-start { justify-content: flex-start; }
+            .md\:w-56 { width: 14rem; }
+            .md\:h-56 { height: 14rem; }
+            .md\:text-5xl { font-size: 3rem; line-height: 1; }
+            .md\:text-base { font-size: 1rem; line-height: 1.5rem; }
+        }
+    </style>
+
+    <!-- Schema.org Person Data (Google Structured Data) -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Jonas Schnell",
+            "url": "https://jonasschnell.com",
+            "image": "https://jonasschnell.com/image/jonas.png",
+            "jobTitle": "Systems Architect & Developer",
+            "worksFor": {
+                "@type": "Organization",
+                "name": "Darkstone Cloud",
+                "url": "https://darkstone.de"
+            }
+        }
+    </script>
+</head>
+<body class="bg-ash-950 text-ash-300 font-sans bg-ash-grid min-h-screen flex flex-col justify-between">
+
+<!-- Header Navigation -->
+<header class="sticky top-0 z-50 border-b border-ash-800/60 bg-ash-950/80 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a href="https://jonasschnell.com"
+           class="font-mono text-xs tracking-widest text-ash-100 uppercase font-semibold flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-ash-500"></span>
+            jonasschnell.com
+        </a>
+        <nav class="flex items-center space-x-6 text-xs font-mono uppercase tracking-wider text-ash-500">
+            <a href="#about" class="hover:text-ash-100 transition-colors">Über mich</a>
+            <a href="#projects" class="hover:text-ash-100 transition-colors">Projekte</a>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="max-w-6xl mx-auto px-6 py-12 md:py-16 space-y-20 flex-grow w-full">
+
+    <!-- HERO / ABOUT SECTION -->
+    <section id="about" class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+
+        <!-- PROFILBILD -->
+        <div class="md:col-span-4 flex justify-center md:justify-start">
+            <div class="relative group">
+                <div class="w-48 h-48 md:w-56 md:h-56 rounded-2xl overflow-hidden ash-card">
+                    <img
+                            src="image/jonas.png"
+                            alt="Jonas Schnell Profilbild"
+                            width="224"
+                            height="224"
+                            loading="eager"
+                            class="w-full h-full object-cover rounded-xl filter transition-all"
+                    />
+                </div>
+            </div>
+        </div>
+
+        <!-- INFO BOX -->
+        <div class="md:col-span-8 space-y-5">
+            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-ash-100">
+                Jonas Schnell
+            </h1>
+
+            <p class="text-ash-300 leading-relaxed text-sm md:text-base">
+                Hey, ich bin Jonas. Ich bin aktuell 19 Jahre alt und der Gründer von <strong class="text-ash-100">Darkstone Cloud</strong>.<br>
+                Ich liebe es zu Reisen und meine Hobbies sind <strong class="text-ash-100">🏂 Snowboarden</strong> und ins <strong class="text-ash-100">Gym 💪</strong> zu gehen.
+            </p>
+
+            <!-- Hobbies / Tech Tags -->
+            <div class="flex flex-wrap gap-2 pt-2">
+                <span class="px-3 py-1.5 rounded-lg text-xs font-mono bg-ash-900 border border-ash-800 text-ash-300 flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5 text-ash-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"></line></svg>
+                    Snowboarding
+                </span>
+                <span class="px-3 py-1.5 rounded-lg text-xs font-mono bg-ash-900 border border-ash-800 text-ash-300 flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5 text-ash-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 6.5 11 11"></path><path d="m21 21-1-1"></path><path d="m3 3 1 1"></path><path d="m18 22 4-4"></path><path d="m2 6 4-4"></path><path d="m3 10 7-7"></path><path d="m14 21 7-7"></path></svg>
+                    Fitness & Gym
+                </span>
+                <span class="px-3 py-1.5 rounded-lg text-xs font-mono bg-ash-900 border border-ash-800 text-ash-300 flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5 text-ash-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"></path><path d="M18.4 6.6a9 9 0 1 1-12.77 0"></path></svg>
+                    Entrepreneurship
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects" class="space-y-8">
+        <div class="flex items-center justify-between border-b border-ash-800 pb-4">
+            <h2 class="text-xl font-bold font-mono tracking-wide text-ash-100 flex items-center gap-2.5">
+                <svg class="w-5 h-5 text-ash-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                Projekte
+            </h2>
+            <span class="text-xs font-mono text-ash-500">02 Highlights</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <!-- PROJECT 1: Darkstone Cloud -->
+            <article class="ash-card rounded-2xl overflow-hidden group flex flex-col justify-between">
+                <div>
+                    <div class="aspect-[16/8] w-full bg-ash-900 border-b border-ash-800 overflow-hidden relative">
+                        <img
+                                src="image/darkstone.png"
+                                alt="Darkstone Cloud Banner"
+                                width="600"
+                                height="300"
+                                loading="lazy"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform opacity-80 group-hover:opacity-100"
+                        />
+                    </div>
+
+                    <div class="p-6 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-ash-100 group-hover:text-white transition-colors">
+                                Darkstone Cloud</h3>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-ash-800 text-ash-300">Main Project</span>
+                        </div>
+                        <p class="text-xs font-mono text-ash-500">darkstone.de</p>
+                        <p class="text-ash-300 text-sm leading-relaxed">
+                            Hochverfügbare Cloud-Infrastruktur für Gaming-Studios und Enterprise-Anwendungen. Bietet
+                            optimierte KVM-Virtualisierung, Docker-Compute-Cluster und integrierten DDoS-Schutz.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="p-6 pt-0 space-y-4">
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 rounded text-[11px] font-mono bg-ash-800/50 border border-ash-800 text-ash-300">Docker</span>
+                        <span class="px-2 py-1 rounded text-[11px] font-mono bg-ash-800/50 border border-ash-800 text-ash-300">KVM Compute</span>
+                        <span class="px-2 py-1 rounded text-[11px] font-mono bg-ash-800/50 border border-ash-800 text-ash-300">High-DDoS Defense</span>
+                    </div>
+                    <a href="https://darkstone.de/" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2 text-xs font-mono text-ash-100 hover:text-white transition-colors pt-2">
+                        Website besuchen <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                    </a>
+                </div>
+            </article>
+
+            <!-- PROJECT 2: Eternal Empires -->
+            <article class="ash-card rounded-2xl overflow-hidden group flex flex-col justify-between">
+                <div>
+                    <div class="aspect-[16/8] w-full bg-ash-900 border-b border-ash-800 overflow-hidden relative">
+                        <img
+                                src="image/eternalempires.png"
+                                alt="Eternal Empires Banner"
+                                width="600"
+                                height="300"
+                                loading="lazy"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform opacity-80 group-hover:opacity-100"
+                        />
+                    </div>
+
+                    <div class="p-6 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-ash-100 group-hover:text-white transition-colors">Eternal Empires</h3>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-ash-800/40 text-ash-500">Standby</span>
+                        </div>
+                        <p class="text-xs font-mono text-ash-500">Minecraft MMORPG Server</p>
+                        <p class="text-ash-300 text-sm leading-relaxed">
+                            Ein immersives Rollenspiel-Erlebnis in Minecraft. Bietet eine riesige Open-World voller individueller Quests, lebendiger Charaktere mit Vertonung und maßgeschneiderten Spielmechaniken.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="p-6 pt-0 space-y-4">
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 rounded text-[11px] font-mono bg-ash-800/50 border border-ash-800 text-ash-300">Open World</span>
+                        <span class="px-2 py-1 rounded text-[11px] font-mono bg-ash-800/50 border border-ash-800 text-ash-300">Custom Content</span>
+                        <span class="px-2 py-1 rounded text-[11px] font-mono bg-ash-800/50 border border-ash-800 text-ash-300">Story &amp; Quests</span>
+                    </div>
+                    <a href="https://github.com/EternalEmpires" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2 text-xs font-mono text-ash-100 hover:text-white transition-colors pt-2">
+                        GitHub Organisation <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                    </a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-ash-800/40 py-6 text-center text-xs font-mono text-ash-500 bg-ash-950">
+    <p>Copyright ©
+        <script>document.write(new Date().getFullYear())</script>
+        Jonas Schnell — <a href="#" onclick="l('a')">Impressum</a> — <a href="#" onclick="l('b')">Datenschutzerklärung</a>
+    </p>
+</footer>
+
+<!-- Obfuscation Script -->
+<script>
+    function l(_0x2e811c) {
+        var _0x318d = function (_0x1c6e61, _0x454bc6) {
+            _0x1c6e61 = _0x1c6e61 - 0x0;
+            var _0x1a0525 = _0x3235[_0x1c6e61];
+            return _0x1a0525;
+        };
+        var _0x3235 = ['\x61', '\x68\x74\x74\x70\x73\x3a\x2f\x2f\x64\x61\x72\x6b\x73\x74\x6f\x6e\x65\x2e\x64\x65\x2f\x69\x6d\x70\x72\x69\x6e\x74', '\x62', '\x68\x74\x74\x70\x73\x3a\x2f\x2f\x64\x61\x72\x6b\x73\x74\x6f\x6e\x65\x2e\x64\x65\x2f\x70\x72\x69\x76\x61\x63\x79', '\x23', '\x68\x72\x65\x66', '\x6c\x6f\x63\x61\x74\x69\x6f\x6e'];
+        var _0x50f968 = _0x318d('0x4');
+        if (_0x2e811c === _0x318d('0x0')) {
+            _0x50f968 = _0x318d('0x1');
+        } else if (_0x2e811c === _0x318d('0x2')) {
+            _0x50f968 = _0x318d('0x3');
+        }
+        window[_0x318d('0x6')][_0x318d('0x5')] = _0x50f968;
+    }
+</script>
+</body>
+</html>
