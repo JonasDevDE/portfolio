@@ -411,7 +411,16 @@
             ['image/auto.webp', 'Mein erstes Auto'],
             ['image/food.webp', 'Essen'],
             ['image/more-1.webp', 'Unterwegs'],
-            ['image/more-2.webp', 'Gamescom']
+            ['image/more-2.webp', 'Gamescom'],
+            ['image/devcom.webp', 'devcom Köln'],
+            ['image/sushi.webp', 'Sushi'],
+            ['image/coffee.webp', 'Coffee Corner'],
+            ['image/garmisch.webp', 'Garmisch'],
+            ['image/lift.webp', 'Sessellift im Winter'],
+            ['image/goggles.webp', 'Snowboarden', 'person'],
+            ['image/eiskaffee.webp', 'Eiskaffee'],
+            ['image/welpe-1.webp', 'Welpe'],
+            ['image/welpe-2.webp', 'Welpe']
         ];
         var FADE = 450;
         var DURATION = 7000;
@@ -455,9 +464,16 @@
             var cur = imgs.map(srcOf), best = null;
             for (var t = 0; t < 60; t++) {
                 var order = shuffle(pick);
+                // Bilder mit mir drauf nie als großes Bild (Slot 0)
+                if (order[0][2] === 'person') continue;
                 var clash = order.filter(function (p, i) { return p[0] === cur[i]; }).length;
                 if (!best || clash < best.clash) best = { order: order, clash: clash };
                 if (clash === 0) break;
+            }
+            if (!best) { // Notfall: Personenbild aus Slot 0 tauschen
+                best = { order: shuffle(pick) };
+                var k = best.order.findIndex(function (p) { return p[2] !== 'person'; });
+                if (k > 0) { var t = best.order[0]; best.order[0] = best.order[k]; best.order[k] = t; }
             }
             return best.order;
         }
@@ -509,91 +525,69 @@
     })();
 </script>
 <script>
+    // Spotify-Player ohne iframe-API-Skript (das braucht 'unsafe-eval' und scheitert an der CSP des Hosters):
+    // normaler Embed-iframe + postMessage-Steuerung.
     (function () {
         var btn = document.getElementById('spotify-load');
         var dock = document.getElementById('spotify-dock');
         var closeBtn = document.getElementById('spotify-close');
         if (!btn || !dock) return;
-        var URI = 'spotify:playlist:21o27QcOCcaAfhSKpB28er';
-        var controller = null, started = false, apiRef = null, fallback = false, fbTimer = null;
+        var ORIGIN = 'https://open.spotify.com';
+        var SRC = ORIGIN + '/embed/playlist/21o27QcOCcaAfhSKpB28er?theme=0';
+        var frame = null, ready = false, paused = true, readyTimer = null;
         var PLAY = '<polygon points="7 4 20 12 7 20 7 4"></polygon>';
         var PAUSE = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
-        function setIcon(paused) {
-            var svg = btn.querySelector('svg');
-            if (svg) svg.innerHTML = paused ? PLAY : PAUSE;
-        }
-        function setState(paused) {
-            setIcon(paused);
-            setLabel('✈️🏂 Meine Playlist', paused ? 'Pausiert · Klick zum Abspielen' : 'Läuft · Klick zum Pausieren');
-        }
 
         function setLabel(t1, t2) {
             var s = btn.querySelectorAll('span span');
             if (s[0]) s[0].textContent = t1;
             if (s[1]) s[1].textContent = t2;
         }
+        function setState(isPaused) {
+            paused = isPaused;
+            var svg = btn.querySelector('svg');
+            if (svg) svg.innerHTML = isPaused ? PLAY : PAUSE;
+            setLabel('✈️🏂 Meine Playlist', isPaused ? 'Pausiert · Klick zum Abspielen' : 'Läuft · Klick zum Pausieren');
+        }
+        function send(cmd) {
+            if (frame && frame.contentWindow) frame.contentWindow.postMessage({ command: cmd }, ORIGIN);
+        }
+
+        window.addEventListener('message', function (e) {
+            if (e.origin !== ORIGIN || !frame || e.source !== frame.contentWindow) return;
+            var d = e.data || {};
+            if (d.type === 'ready') {
+                ready = true;
+                clearTimeout(readyTimer);
+                send('resume');
+            } else if (d.type === 'playback_update' && d.payload) {
+                setState(!!d.payload.isPaused);
+            }
+        });
 
         function start() {
-            if (started) { if (controller) controller.togglePlay(); return; }
-            fallback = false;
-            started = true;
+            if (frame) { if (ready) { send('toggle'); setState(!paused); } return; }
             dock.hidden = false;
+            frame = document.createElement('iframe');
+            frame.title = 'Spotify Playlist';
+            frame.src = SRC;
+            frame.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+            frame.style.cssText = 'border-radius:14px;border:0;width:100%;height:80px;display:block';
+            document.getElementById('spotify-mount').appendChild(frame);
             setState(false);
-            if (apiRef) { create(); armFallback(); return; }
-            window.onSpotifyIframeApiReady = function (api) { apiRef = api; create(); };
-            var sc = document.createElement('script');
-            sc.src = 'https://open.spotify.com/embed/iframe-api/v1';
-            sc.async = true;
-            document.body.appendChild(sc);
-            armFallback();
-        }
-
-        // Falls die Spotify-API nicht läuft (z. B. strenge CSP des Hosters: kein 'unsafe-eval'),
-        // wird der normale Embed-iframe genutzt. Dann bitte im Player selbst auf Play drücken.
-        function armFallback() {
-            clearTimeout(fbTimer);
-            fbTimer = setTimeout(function () {
-                if (controller || !started) return;
-                fallback = true;
-                var m = document.getElementById('spotify-mount');
-                if (!m) return;
-                var f = document.createElement('iframe');
-                f.title = 'Spotify Playlist';
-                f.src = 'https://open.spotify.com/embed/playlist/21o27QcOCcaAfhSKpB28er?theme=0';
-                f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
-                f.style.cssText = 'border-radius:14px;border:0;width:100%;height:80px;display:block';
-                m.replaceChildren(f);
-                setIcon(true);
-                setLabel('✈️🏂 Meine Playlist', 'Unten rechts auf Play drücken');
-            }, 5000);
-        }
-
-        function create() {
-            apiRef.createController(document.getElementById('spotify-mount'), { uri: URI, width: '100%', height: 80, theme: 0 }, function (c) {
-                controller = c; clearTimeout(fbTimer);
-                c.addListener('ready', function () { c.play(); });
-                c.addListener('playback_update', function (e) {
-                    if (e && e.data) setState(!!e.data.isPaused);
-                });
-            });
+            // Falls Autoplay blockiert wird oder die Steuerung nicht antwortet: Hinweis
+            readyTimer = setTimeout(function () {
+                if (!ready) { setState(true); setLabel('✈️🏂 Meine Playlist', 'Unten rechts auf Play drücken'); }
+            }, 6000);
         }
 
         btn.addEventListener('click', start);
         closeBtn.addEventListener('click', function () {
-            // Player komplett entfernen (stoppt die Musik, trennt die Verbindung zu Spotify)
-            if (controller && controller.destroy) { try { controller.destroy(); } catch (e) {} }
-            clearTimeout(fbTimer); fallback = false;
-            var f = dock.querySelector('iframe');
-            if (f) f.remove();
-            if (!document.getElementById('spotify-mount')) {
-                var m = document.createElement('div');
-                m.id = 'spotify-mount';
-                m.style.cssText = 'height:80px;border-radius:14px;overflow:hidden';
-                dock.appendChild(m);
-            }
-            controller = null; started = false;
+            clearTimeout(readyTimer);
+            if (frame) frame.remove();
+            frame = null; ready = false;
             dock.hidden = true;
-            setIcon(true);
+            setState(true);
             setLabel('✈️🏂 Meine Playlist', 'Klick lädt den Spotify-Player');
         });
     })();
