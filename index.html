@@ -46,6 +46,7 @@
         }
 
         html {
+            overflow-x: clip;
             line-height: 1.5;
             -webkit-text-size-adjust: 100%;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -215,6 +216,18 @@
         /* Kein Markieren/Kopieren, kein Bilder-Ziehen */
         html, body, * { -webkit-user-select: none; -moz-user-select: none; user-select: none; -webkit-touch-callout: none; }
         img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
+        /* Mobile */
+        @media (max-width: 640px) {
+            header .max-w-6xl { gap: .75rem; }
+            header a.font-mono.tracking-widest { font-size: 10px; letter-spacing: .06em; white-space: nowrap; }
+            header nav { font-size: 10px; letter-spacing: .02em; white-space: nowrap; }
+            header nav.space-x-6 > * + * { margin-left: .85rem; }
+            header nav a[href="#about"] { display: none; }
+            main { padding-top: 2rem; padding-bottom: 2rem; }
+            #about { gap: 1.5rem; }
+            #spotify-dock { left: .75rem !important; right: .75rem !important; bottom: .75rem !important; width: auto !important; }
+            .ash-card .p-6 { padding: 1.25rem; }
+        }
         /* Galerie */
         .gallery { display: grid; gap: 0.75rem; grid-template-columns: 1fr 1fr; }
         .gallery figure { margin: 0; overflow: hidden; border-radius: 1rem; aspect-ratio: 1 / 1; background: var(--ash-900); }
@@ -236,7 +249,7 @@
         #about { position: relative; }
         #about::before { content: ""; position: absolute; inset: -4rem -2rem; z-index: -1; pointer-events: none;
             background: radial-gradient(60% 60% at 25% 40%, rgba(139, 92, 246, .14), transparent 70%); }
-        main { position: relative; z-index: 0; }
+        main { position: relative; z-index: 0; overflow-x: clip; }
         h1 { background: linear-gradient(90deg, #fff, #a1a1aa); -webkit-background-clip: text; background-clip: text; color: transparent !important; }
     </style>
 
