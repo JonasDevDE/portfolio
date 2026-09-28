@@ -515,7 +515,7 @@
         var closeBtn = document.getElementById('spotify-close');
         if (!btn || !dock) return;
         var URI = 'spotify:playlist:21o27QcOCcaAfhSKpB28er';
-        var controller = null, started = false, apiRef = null;
+        var controller = null, started = false, apiRef = null, fallback = false, fbTimer = null;
         var PLAY = '<polygon points="7 4 20 12 7 20 7 4"></polygon>';
         var PAUSE = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
         function setIcon(paused) {
@@ -535,20 +535,42 @@
 
         function start() {
             if (started) { if (controller) controller.togglePlay(); return; }
+            fallback = false;
             started = true;
             dock.hidden = false;
             setState(false);
-            if (apiRef) { create(); return; }
+            if (apiRef) { create(); armFallback(); return; }
             window.onSpotifyIframeApiReady = function (api) { apiRef = api; create(); };
             var sc = document.createElement('script');
             sc.src = 'https://open.spotify.com/embed/iframe-api/v1';
             sc.async = true;
             document.body.appendChild(sc);
+            armFallback();
+        }
+
+        // Falls die Spotify-API nicht läuft (z. B. strenge CSP des Hosters: kein 'unsafe-eval'),
+        // wird der normale Embed-iframe genutzt. Dann bitte im Player selbst auf Play drücken.
+        function armFallback() {
+            clearTimeout(fbTimer);
+            fbTimer = setTimeout(function () {
+                if (controller || !started) return;
+                fallback = true;
+                var m = document.getElementById('spotify-mount');
+                if (!m) return;
+                var f = document.createElement('iframe');
+                f.title = 'Spotify Playlist';
+                f.src = 'https://open.spotify.com/embed/playlist/21o27QcOCcaAfhSKpB28er?theme=0';
+                f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+                f.style.cssText = 'border-radius:14px;border:0;width:100%;height:80px;display:block';
+                m.replaceChildren(f);
+                setIcon(true);
+                setLabel('✈️🏂 Meine Playlist', 'Unten rechts auf Play drücken');
+            }, 5000);
         }
 
         function create() {
             apiRef.createController(document.getElementById('spotify-mount'), { uri: URI, width: '100%', height: 80, theme: 0 }, function (c) {
-                controller = c;
+                controller = c; clearTimeout(fbTimer);
                 c.addListener('ready', function () { c.play(); });
                 c.addListener('playback_update', function (e) {
                     if (e && e.data) setState(!!e.data.isPaused);
@@ -560,6 +582,7 @@
         closeBtn.addEventListener('click', function () {
             // Player komplett entfernen (stoppt die Musik, trennt die Verbindung zu Spotify)
             if (controller && controller.destroy) { try { controller.destroy(); } catch (e) {} }
+            clearTimeout(fbTimer); fallback = false;
             var f = dock.querySelector('iframe');
             if (f) f.remove();
             if (!document.getElementById('spotify-mount')) {
